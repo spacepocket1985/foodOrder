@@ -1,7 +1,10 @@
 import './App.css';
+import { Header } from './components/Layout/Header';
 
 function App(): JSX.Element {
-  return <h1>Hello world </h1>;
+  return <>
+  <Header></Header>
+  </>;
 }
 
 export default App;
