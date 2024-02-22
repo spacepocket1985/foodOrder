@@ -1,7 +1,8 @@
+import { getInfoAboutCartItem } from '../../components/utils/getInfoAboutCartItem';
 import { CartItemType } from '../../types/types';
 import { CartActionsType } from '../actions/actions';
 
-type CartStateType = {
+export type CartStateType = {
   items: Array<CartItemType>;
   totalAmount: number;
 };
@@ -17,18 +18,14 @@ export const cartReducer = (
 ): CartStateType => {
   switch (action.type) {
     case 'ADD_ITEM':
+      const temp = getInfoAboutCartItem(state, action.payload).itemIndex;
+      const newArr = temp === -1
+        ? [action.payload, ...state.items]
+        : [...state.items, state.items[temp]={...state.items[temp],amount:555555}];
       return {
         ...state,
-        items: state.items.map((item) =>
-          item.id === action.payload.id
-            ? {
-                id: item.id,
-                name: item.name,
-                price: item.price,
-                amount: item.amount + action.payload.amount,
-              }
-            : item
-        ),
+        items: newArr,
+        
         totalAmount:
           state.totalAmount + action.payload.price * action.payload.amount,
       };

@@ -7,7 +7,7 @@ type MealItemPropsType = {
 };
 
 const MealItem = (props: MealItemPropsType): JSX.Element => {
-  const { name, description, price, id } = props.meal;
+  const { name, description, price } = props.meal;
 
   const formattedPrice = `$${price.toFixed(2)}`;
 
@@ -19,7 +19,7 @@ const MealItem = (props: MealItemPropsType): JSX.Element => {
         <div className={styles.price}>{formattedPrice}</div>
       </div>
       <div>
-        <MealItemForm id={id} />
+        <MealItemForm  meal={props.meal}/>
       </div>
     </li>
   );
