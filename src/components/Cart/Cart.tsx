@@ -1,6 +1,7 @@
+import { Modal } from '../UI/Modal';
 import styles from './Cart.module.css';
 
-type CartPropsType = {someProps: string};
+type CartPropsType = {someProps?: string};
 
 export const Cart = (props: CartPropsType): JSX.Element => {
   const {} = props;
@@ -13,7 +14,7 @@ export const Cart = (props: CartPropsType): JSX.Element => {
   );
 
   return (
-    <div>
+    <Modal>
       {cartItems}
       <div className={styles.total}>
         <span>Итого</span>
@@ -23,6 +24,6 @@ export const Cart = (props: CartPropsType): JSX.Element => {
         <button className={styles['button--alt']}>Закрыть</button>
         <button className={styles.button}>Заказать</button>
       </div>
-    </div>
+    </Modal>
   );
 };
