@@ -5,7 +5,7 @@ import { Header } from './components/Layout/Header';
 import { Meals } from './components/Meals/Meals';
 
 import './App.css';
-import { CartContextProvider } from './context/cartContextProvider';
+import { CartContextProvider } from './store/cartContextProvider';
 
 function App(): JSX.Element {
   const [cartIsVisible, setCartIsVisible] = useState(false);
@@ -20,8 +20,8 @@ function App(): JSX.Element {
 
   return (
     <CartContextProvider>
-      <Header onShowCart={showCartHandler}/>
-      {cartIsVisible && <Cart onHideCart = {hideCartHandler}/>}
+      <Header onShowCart={showCartHandler} />
+      {cartIsVisible && <Cart onHideCart={hideCartHandler} />}
       <main>
         <Meals />
       </main>
