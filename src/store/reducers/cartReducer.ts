@@ -40,6 +40,18 @@ export const cartReducer = (
         totalAmount:
           state.totalAmount + action.payload.price * action.payload.amount,
       };
+    case 'REMOVE_ITEM':
+      const itemInCart = state.items.find((item) => item.id === action.payload);
+      if (!itemInCart) return defaultCartState;
+      const updateItems = itemInCart?.amount === 1
+        ?  state.items.filter((item) => item.id !== action.payload) :
+        state.items.map((item)=>item.id!==action.payload? item : {...item, amount: item.amount-1})
+      return {
+        ...state,
+        items: updateItems,
+        totalAmount: state.totalAmount - itemInCart.price
+      }       
+  
   }
 
   return defaultCartState;
