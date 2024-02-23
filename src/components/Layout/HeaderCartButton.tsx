@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 
 import { CartContext } from '../../store/cartContext';
 import { CartIcon } from '../Cart/CartIcon';
@@ -13,13 +13,33 @@ export const HeaderCartButton = ({
   onShowCart,
 }: HeaderCartButtonPropsType): JSX.Element => {
   const cartContext = useContext(CartContext);
+  const [isButtonAnimated, setIsButtonAnimated] = useState(false);
+
+  const buttonClasses = `${styles.button} ${
+    isButtonAnimated ? styles.bump : ""
+  }`;
+
+  useEffect(() => {
+    if (cartContext.items.length === 0) {
+      return;
+    }
+    setIsButtonAnimated(true);
+
+    const timer = setTimeout(() => {
+      setIsButtonAnimated(false);
+    }, 300);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [cartContext.items]);
 
   const cartItemsNumber = cartContext.items.reduce((currentValue, item) => {
     return currentValue + item.amount;
   }, 0);
 
   return (
-    <button className={styles.button} onClick={onShowCart}>
+    <button className={buttonClasses} onClick={onShowCart}>
       <span className={styles.icon}>
         <CartIcon />
       </span>
@@ -28,3 +48,4 @@ export const HeaderCartButton = ({
     </button>
   );
 };
+
