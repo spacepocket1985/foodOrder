@@ -12,16 +12,13 @@ export const Cart = (props: CartPropsType): JSX.Element => {
 
   const { onHideCart } = props;
 
+  const totalAmount = `$${cartContext.totalAmount.toFixed(2)}`;
+  const hasItems = cartContext.items.length > 0;
+
   const cartItems = (
     <ul className={styles['cart-items']}>
       {cartContext.items.map((item) => (
-        <CartItem
-          cartItem={item}
-          onAdd={() => {
-            cartContext.addItem(item);
-          }}
-          onRemove={() => {}}
-        />
+        <CartItem cartItem={item} />
       ))}
     </ul>
   );
@@ -31,13 +28,13 @@ export const Cart = (props: CartPropsType): JSX.Element => {
       {cartItems}
       <div className={styles.total}>
         <span>Итого</span>
-        <span>{cartContext.totalAmount}</span>
+        <span>{totalAmount}</span>
       </div>
       <div className={styles.actions}>
         <button className={styles['button--alt']} onClick={onHideCart}>
           Закрыть
         </button>
-        <button className={styles.button}>Заказать</button>
+        {hasItems && <button className={styles.button}>Заказать</button>}
       </div>
     </Modal>
   );

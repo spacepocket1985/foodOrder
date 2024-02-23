@@ -1,4 +1,4 @@
-import { useContext, useRef } from 'react';
+import { useContext, useRef, useState } from 'react';
 
 import { DummyMealsType } from '../../../types/types';
 import { Input } from '../../UI/Input';
@@ -11,9 +11,30 @@ type MealItemFormPropsType = {
 };
 
 export const MealItemForm = (props: MealItemFormPropsType): JSX.Element => {
+  const [isAmountValid, setIsAmountValid] = useState(true);
   const cartContext = useContext(CartContext);
+
   const inputRef = useRef<HTMLInputElement>(null);
+
   const { id, name, price } = props.meal;
+
+  const onSubmitHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    if (
+      Number(inputRef.current?.value) <= 0 ||
+      Number(inputRef.current?.value) > 10
+    ) {
+      setIsAmountValid(false);
+      return;
+    }
+    cartContext.addItem({
+      id,
+      name,
+      price,
+      amount: Number(inputRef.current?.value),
+    });
+    setIsAmountValid(true);
+  };
   return (
     <form className={styles.form}>
       <Input
@@ -25,21 +46,8 @@ export const MealItemForm = (props: MealItemFormPropsType): JSX.Element => {
         defaultValue="1"
         ref={inputRef}
       />
-      <button
-        type="button"
-        onClick={() => {
-          if (Number(inputRef.current?.value) > 0) {
-            cartContext.addItem({
-              id,
-              name,
-              price,
-              amount: Number(inputRef.current?.value),
-            });
-          }
-        }}
-      >
-        Добавить
-      </button>
+      <button onClick={onSubmitHandler}>Добавить</button>
+      {!isAmountValid && <p>Пожалуйста введите количество от 1 до 10</p>}
     </form>
   );
 };
