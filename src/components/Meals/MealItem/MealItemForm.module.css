@@ -18,3 +18,8 @@
   background-color: #47035d;
   border-color: #47035d;
 }
+
+.form button:disabled
+{
+opacity: .5;
+}

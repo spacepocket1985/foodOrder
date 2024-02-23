@@ -18,17 +18,29 @@ export const cartReducer = (
 ): CartStateType => {
   switch (action.type) {
     case 'ADD_ITEM':
-      const temp = getInfoAboutCartItem(state, action.payload).itemIndex;
-      const newArr = temp === -1
-        ? [action.payload, ...state.items]
-        : [...state.items, state.items[temp]={...state.items[temp],amount:555555}];
+      const itemIndex = getInfoAboutCartItem(state, action.payload).itemIndex;
+      const newItems =
+        itemIndex === -1
+          ? [action.payload, ...state.items]
+          : [
+              ...state.items.map((item) =>
+                item.id !== action.payload.id
+                  ? item
+                  : {
+                      ...action.payload,
+                      amount: getInfoAboutCartItem(state, action.payload)
+                        .itemAmount,
+                    }
+              ),
+            ];
       return {
         ...state,
-        items: newArr,
-        
+        items: newItems,
+
         totalAmount:
           state.totalAmount + action.payload.price * action.payload.amount,
       };
   }
+
   return defaultCartState;
 };

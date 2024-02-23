@@ -1,3 +1,4 @@
+import React from 'react';
 import { HTMLInputTypeAttribute } from 'react';
 import styles from './Input.module.css';
 
@@ -8,10 +9,11 @@ type InputPropsType = {
   step: string;
   defaultValue: string;
   type: HTMLInputTypeAttribute;
+  ref: React.RefObject<HTMLInputElement>;
 };
 
-export const Input = (props: InputPropsType): JSX.Element => {
-  const { id, label, type, min, step, defaultValue } = props;
+export const Input = React.forwardRef((props: InputPropsType, ref: React.Ref<HTMLInputElement>): JSX.Element => {
+  const { id, label, type, min, step, defaultValue} = props;
   return (
     <div className={styles.input}>
       <label htmlFor={id}>{label}</label>
@@ -21,7 +23,8 @@ export const Input = (props: InputPropsType): JSX.Element => {
         min={min}
         step={step}
         defaultValue={defaultValue}
+        ref={ref}
       />
     </div>
   );
-};
+});

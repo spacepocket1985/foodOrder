@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useRef } from 'react';
 
 import { DummyMealsType } from '../../../types/types';
 import { Input } from '../../UI/Input';
@@ -12,7 +12,7 @@ type MealItemFormPropsType = {
 
 export const MealItemForm = (props: MealItemFormPropsType): JSX.Element => {
   const cartContext = useContext(CartContext);
-
+  const inputRef = useRef<HTMLInputElement>(null);
   const { id, name, price } = props.meal;
   return (
     <form className={styles.form}>
@@ -23,11 +23,19 @@ export const MealItemForm = (props: MealItemFormPropsType): JSX.Element => {
         min="1"
         step="1"
         defaultValue="1"
+        ref={inputRef}
       />
       <button
         type="button"
         onClick={() => {
-          cartContext.addItem({ id, name, price, amount: 1 });
+          if (Number(inputRef.current?.value) > 0) {
+            cartContext.addItem({
+              id,
+              name,
+              price,
+              amount: Number(inputRef.current?.value),
+            });
+          }
         }}
       >
         Добавить
