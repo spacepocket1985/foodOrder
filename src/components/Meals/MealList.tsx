@@ -1,3 +1,4 @@
+import { FireBaseService } from '../../assets/service/FireBaseService';
 import { DummyMealsType } from '../../types/types';
 import { Card } from '../UI/Card';
 import MealItem from './MealItem/MealItem';
@@ -33,6 +34,9 @@ const DUMMY_MEALS: Array<DummyMealsType> = [
 ];
 
 export const MealList = (): JSX.Element => {
+  const { getMeals } = FireBaseService();
+  const res = getMeals()
+  console.log(res)
   const mealList: JSX.Element[] = DUMMY_MEALS.map((meal) => {
     return <MealItem key={meal.id} meal={meal} />;
   });
