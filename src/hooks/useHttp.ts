@@ -12,7 +12,7 @@ type ManageDataType = (data: FireBaseDataType) => void;
 
 type HttpResponseTYpe = {
   isLoading: boolean;
-  error: string | null;
+  isError: string | null;
   sendHttpRequest: (
     requestOptions: RequestOptionsType,
     manageData: ManageDataType
@@ -21,13 +21,13 @@ type HttpResponseTYpe = {
 
 const useHttp = (): HttpResponseTYpe => {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [isError, setIsError] = useState<string | null>(null);
 
   const sendHttpRequest = useCallback(
     async (requestOptions: RequestOptionsType, manageData: ManageDataType) => {
 
       setIsLoading(true);
-      setError(null);
+      setIsError(null);
 
       try {
         const response = await fetch(requestOptions.endpoint, {
@@ -46,7 +46,7 @@ const useHttp = (): HttpResponseTYpe => {
         
         manageData(data);
       } catch (err) {
-        if (err instanceof Error) setError(err.message);
+        if (err instanceof Error) setIsError(err.message);
       }
       setIsLoading(false);
     },
@@ -55,7 +55,7 @@ const useHttp = (): HttpResponseTYpe => {
 
   return {
     isLoading,
-    error,
+    isError,
     sendHttpRequest,
   };
 };

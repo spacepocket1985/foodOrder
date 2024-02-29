@@ -5,25 +5,26 @@ import { Card } from '../UI/Card';
 import MealItem from './MealItem/MealItem';
 import styles from './MealList.module.css';
 
-
 export const MealList = (): JSX.Element => {
   const [meals, setMeals] = useState<DummyMealsType[]>([]);
 
   const httpRequestData = useHttp();
-  const { isLoading, error, sendHttpRequest: fetchProducts } = httpRequestData;
+  const {
+    isLoading,
+    isError,
+    sendHttpRequest: fetchProducts,
+  } = httpRequestData;
 
   useEffect(() => {
-    const manageMeals = (meals: FireBaseMealsType ) => {
-
-      const loadedMeals:DummyMealsType [] = [];
+    const manageMeals = (meals: FireBaseMealsType) => {
+      const loadedMeals: DummyMealsType[] = [];
 
       for (const key in meals) {
-        
         loadedMeals.push({
           id: key,
           name: meals[key].name,
-          description:meals[key].description,
-          price: meals[key].price
+          description: meals[key].description,
+          price: meals[key].price,
         });
       }
 
@@ -32,9 +33,10 @@ export const MealList = (): JSX.Element => {
 
     fetchProducts(
       {
-        endpoint: 'https://foodorder-35bc5-default-rtdb.firebaseio.com/meals.json',
+        endpoint:
+          'https://foodorder-35bc5-default-rtdb.firebaseio.com/meals.json',
       },
-      manageMeals 
+      manageMeals
     );
   }, [fetchProducts]);
 
@@ -42,11 +44,31 @@ export const MealList = (): JSX.Element => {
     return <MealItem key={meal.id} meal={meal} />;
   });
 
-  return (
+  const loading = isLoading ? (
+    <section className={styles.loading}>
+      <p>Fetching data from server...</p>
+    </section>
+  ) : null;
+
+  const error = isError ? (
+    <section className={styles.error}>
+      <p>{isError}</p>
+    </section>
+  ) : null;
+
+  const content = !(isLoading || isError) ? (
     <section className={styles.meals}>
       <Card>
         <ul> {mealList}</ul>
       </Card>
     </section>
+  ) : null;
+
+  return (
+    <>
+      {loading}
+      {error}
+      {content}
+    </>
   );
 };
