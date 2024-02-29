@@ -1,43 +1,44 @@
-import { FireBaseService } from '../../assets/service/FireBaseService';
-import { DummyMealsType } from '../../types/types';
+import { useEffect, useState } from 'react';
+import useHttp from '../../hooks/useHttp';
+import { DummyMealsType, FireBaseMealsType } from '../../types/types';
 import { Card } from '../UI/Card';
 import MealItem from './MealItem/MealItem';
 import styles from './MealList.module.css';
 
-const DUMMY_MEALS: Array<DummyMealsType> = [
-  {
-    id: 'm1',
-    name: 'Ролл "Наоми"',
-    description:
-      'Сыр Филадельфия, куриное филе, масаго, помидор, огурец, кунжут',
-    price: 10,
-  },
-  {
-    id: 'm2',
-    name: 'Спайс в лососе',
-    description: 'Рис, лосось, соус спайс',
-    price: 4,
-  },
-  {
-    id: 'm3',
-    name: 'Суши с угрем',
-    description: 'Угорь копченый, соус унаги, кунжут',
-    price: 5,
-  },
-  {
-    id: 'm4',
-    name: 'Салат "Поке с лососем"',
-    description:
-      'Рис, лосось, огурец, чука, нори, стружка тунца, соус ореховый',
-    price: 8,
-  },
-];
 
 export const MealList = (): JSX.Element => {
-  const { getMeals } = FireBaseService();
-  const res = getMeals()
-  console.log(res)
-  const mealList: JSX.Element[] = DUMMY_MEALS.map((meal) => {
+  const [meals, setMeals] = useState<DummyMealsType[]>([]);
+
+  const httpRequestData = useHttp();
+  const { isLoading, error, sendHttpRequest: fetchProducts } = httpRequestData;
+
+  useEffect(() => {
+    const manageMeals = (meals: FireBaseMealsType ) => {
+
+      const loadedMeals:DummyMealsType [] = [];
+
+      for (const key in meals) {
+        
+        loadedMeals.push({
+          id: key,
+          name: meals[key].name,
+          description:meals[key].description,
+          price: meals[key].price
+        });
+      }
+
+      setMeals(loadedMeals);
+    };
+
+    fetchProducts(
+      {
+        endpoint: 'https://foodorder-35bc5-default-rtdb.firebaseio.com/meals.json',
+      },
+      manageMeals 
+    );
+  }, [fetchProducts]);
+
+  const mealList: JSX.Element[] = meals.map((meal) => {
     return <MealItem key={meal.id} meal={meal} />;
   });
 

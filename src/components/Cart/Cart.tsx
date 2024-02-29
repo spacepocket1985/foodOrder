@@ -18,7 +18,7 @@ export const Cart = (props: CartPropsType): JSX.Element => {
   const cartItems = (
     <ul className={styles['cart-items']}>
       {cartContext.items.map((item) => (
-        <CartItem cartItem={item} />
+        <CartItem cartItem={item} key={item.id}/>
       ))}
     </ul>
   );
