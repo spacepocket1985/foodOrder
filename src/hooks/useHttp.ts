@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { FireBaseMealsType } from '../types/types';
+import { FireBaseMealsType, FireBaseOrderInfo, UserDataType } from '../types/types';
 
 type RequestOptionsType = {
   endpoint: string;
@@ -8,14 +8,14 @@ type RequestOptionsType = {
   body?: BodyInit | null | undefined;
 };
 
-type ManageDataType = (data: FireBaseMealsType) => void;
+export type ManageDataType<T> = (data: T) => void;
 
 type HttpResponseTYpe = {
   isLoading: boolean;
   isError: string | null;
   sendHttpRequest: (
     requestOptions: RequestOptionsType,
-    manageData: ManageDataType
+    manageData: ManageDataType<FireBaseMealsType | FireBaseOrderInfo>
   ) => Promise<void>;
 };
 
@@ -26,7 +26,7 @@ const useHttp = (): HttpResponseTYpe => {
   const sendHttpRequest = useCallback(
     async (
       requestOptions: RequestOptionsType,
-      manageData: ManageDataType
+      manageData: ManageDataType<FireBaseMealsType | UserDataType>
     ): Promise<void> => {
       setIsLoading(true);
       setIsError(null);

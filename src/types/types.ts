@@ -29,3 +29,17 @@ export type FireBaseMealType = {
 export type FireBaseMealsType = {
   [key: string]: FireBaseMealType;
 };
+
+export type FireBaseOrderInfo = {
+  name: string;
+};
+
+export type UserDataType = {
+  name: string;
+  city: string;
+  address: string;
+};
+
+export type FireBaseUserOrderType = {
+  [key: string]: { user: UserDataType; meals: CartItemType[] };
+};

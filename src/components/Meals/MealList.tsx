@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import useHttp from '../../hooks/useHttp';
-import { DummyMealsType, FireBaseMealsType } from '../../types/types';
+import useHttp, { ManageDataType } from '../../hooks/useHttp';
+import { DummyMealsType, FireBaseMealsType, FireBaseOrderInfo, UserDataType } from '../../types/types';
 import { ErrorMessage } from '../ErrorMessage/ErrorMessage';
 import { Spinner } from '../Spinner/Spinner';
 import { Card } from '../UI/Card';
@@ -18,7 +18,7 @@ export const MealList = (): JSX.Element => {
   } = httpRequestData;
 
   useEffect(() => {
-    const manageMeals = (meals: FireBaseMealsType) => {
+    const manageMeals: ManageDataType<FireBaseMealsType> = (meals: FireBaseMealsType) => {
       const loadedMeals: DummyMealsType[] = [];
 
       for (const key in meals) {
@@ -38,7 +38,7 @@ export const MealList = (): JSX.Element => {
         endpoint:
           'https://foodorder-35bc5-default-rtdb.firebaseio.com/meals.json',
       },
-      manageMeals
+      manageMeals as ManageDataType<FireBaseMealsType | FireBaseOrderInfo>
     );
   }, [fetchProducts]);
 
