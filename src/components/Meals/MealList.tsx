@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import useHttp from '../../hooks/useHttp';
 import { DummyMealsType, FireBaseMealsType } from '../../types/types';
+import { ErrorMessage } from '../ErrorMessage/ErrorMessage';
+import { Spinner } from '../Spinner/Spinner';
 import { Card } from '../UI/Card';
 import MealItem from './MealItem/MealItem';
 import styles from './MealList.module.css';
@@ -44,17 +46,9 @@ export const MealList = (): JSX.Element => {
     return <MealItem key={meal.id} meal={meal} />;
   });
 
-  const loading = isLoading ? (
-    <section className={styles.loading}>
-      <p>Fetching data from server...</p>
-    </section>
-  ) : null;
+  const loading = isLoading ? <Spinner /> : null;
 
-  const error = isError ? (
-    <section className={styles.error}>
-      <p>{isError}</p>
-    </section>
-  ) : null;
+  const error = isError ? <ErrorMessage errorMsg={isError} /> : null;
 
   const content = !(isLoading || isError) ? (
     <section className={styles.meals}>

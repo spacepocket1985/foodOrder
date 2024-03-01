@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { FireBaseDataType } from '../types/types';
+import { FireBaseMealsType } from '../types/types';
 
 type RequestOptionsType = {
   endpoint: string;
@@ -8,7 +8,7 @@ type RequestOptionsType = {
   body?: BodyInit | null | undefined;
 };
 
-type ManageDataType = (data: FireBaseDataType) => void;
+type ManageDataType = (data: FireBaseMealsType) => void;
 
 type HttpResponseTYpe = {
   isLoading: boolean;
@@ -24,8 +24,10 @@ const useHttp = (): HttpResponseTYpe => {
   const [isError, setIsError] = useState<string | null>(null);
 
   const sendHttpRequest = useCallback(
-    async (requestOptions: RequestOptionsType, manageData: ManageDataType) => {
-
+    async (
+      requestOptions: RequestOptionsType,
+      manageData: ManageDataType
+    ): Promise<void> => {
       setIsLoading(true);
       setIsError(null);
 
@@ -42,8 +44,8 @@ const useHttp = (): HttpResponseTYpe => {
           throw new Error('We have some error in fetch data');
         }
 
-        const data = await response.json();
-        
+        const data: FireBaseMealsType = await response.json();
+
         manageData(data);
       } catch (err) {
         if (err instanceof Error) setIsError(err.message);

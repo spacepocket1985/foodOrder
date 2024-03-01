@@ -1,0 +1,26 @@
+.errorMessage {
+  margin: auto;
+}
+
+.errorMessageImg {
+  display: block;
+  width: 25rem;
+  height: 19.3rem;
+  object-fit: contain;
+  margin: 0 auto;
+}
+
+.errorMessageTitle {
+  margin-top: 3rem;
+  font-size: 2.5rem;
+}
+
+.errorMessageInfo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border: 0.2rem dotted cadetblue;
+  border-left: 0;
+  border-right: 0;
+}
