@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import useHttp, { ManageDataType } from '../../hooks/useHttp';
-import { DummyMealsType, FireBaseMealsType, FireBaseOrderInfo, UserDataType } from '../../types/types';
+import { DummyMealsType, FireBaseMealsType, FireBaseOrderInfo} from '../../types/types';
 import { ErrorMessage } from '../ErrorMessage/ErrorMessage';
 import { Spinner } from '../Spinner/Spinner';
 import { Card } from '../UI/Card';

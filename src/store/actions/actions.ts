@@ -1,6 +1,9 @@
 import { CartItemType } from '../../types/types';
 
-export type CartActionsType = ActionAddItemType | ActionRemoveItemType;
+export type CartActionsType =
+  | ActionAddItemType
+  | ActionRemoveItemType
+  | ActionClearCartType;
 
 type ActionAddItemType = {
   type: 'ADD_ITEM';
@@ -24,4 +27,12 @@ export const removeItemAC = (id: string): ActionRemoveItemType => {
     type: 'REMOVE_ITEM',
     payload: id,
   };
+};
+
+type ActionClearCartType = {
+  type: 'CLEAR-CART';
+};
+
+export const clearCartAC = (): ActionClearCartType => {
+  return { type: 'CLEAR-CART' };
 };

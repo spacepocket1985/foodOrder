@@ -42,7 +42,9 @@ export const cartReducer = (
       };
     case 'REMOVE_ITEM':
       const itemInCart = state.items.find((item) => item.id === action.payload);
-      if (!itemInCart) return defaultCartState;
+      if (!itemInCart) {
+        return defaultCartState;
+      }
       const updateItems =
         itemInCart?.amount === 1
           ? state.items.filter((item) => item.id !== action.payload)
@@ -56,5 +58,10 @@ export const cartReducer = (
         items: updateItems,
         totalAmount: state.totalAmount - itemInCart.price,
       };
+
+      case 'CLEAR-CART' : return defaultCartState
+
+    default:
+      return defaultCartState;
   }
 };

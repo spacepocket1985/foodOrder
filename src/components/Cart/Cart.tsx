@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react';
 
 import {
+  CartItemType,
   FireBaseMealsType,
   FireBaseOrderInfo,
   UserDataType,
@@ -13,19 +14,27 @@ import { SubmitOrder } from './SubmitOrder';
 import useHttp, { ManageDataType } from '../../hooks/useHttp';
 
 type CartPropsType = { onHideCart: () => void };
+type FullInfoAboutOrderType = {
+  id: string;
+  user: UserDataType;
+  meals: CartItemType[];
+};
 
 export const Cart = (props: CartPropsType): JSX.Element => {
   const [isSubmitOrderAvailable, setIsSubmitOrderAvailable] = useState(false);
   const [isDataSubmitting, setIsDataSubmitting] = useState(false);
   const [wasDataSendingSuccessful, setWasDataSendingSuccessful] =
     useState(false);
+  const [infoAboutUserOrder, setInfoAboutUserOrder] = useState<
+    FullInfoAboutOrderType[]
+  >([]);
 
   const cartContext = useContext(CartContext);
 
   const { onHideCart } = props;
 
   const httpRequestData = useHttp();
-  const { isLoading, isError, sendHttpRequest: sendProducts } = httpRequestData;
+  const { sendHttpRequest: sendProducts } = httpRequestData;
 
   const totalAmount = `$${cartContext.totalAmount.toFixed(2)}`;
   const hasItems = cartContext.items.length > 0;
@@ -41,17 +50,18 @@ export const Cart = (props: CartPropsType): JSX.Element => {
   const orderHandler = (): void => {
     setIsSubmitOrderAvailable(true);
   };
+
   const submitOrderHandler = (userData: UserDataType) => {
     const logUserOrder: ManageDataType<FireBaseOrderInfo> = (
       data: FireBaseOrderInfo
     ) => {
-      const fullInfoAboutOrder = {
+      const fullInfoAboutOrder: FullInfoAboutOrderType = {
         id: data.name,
         user: userData,
         meals: cartContext.items,
       };
 
-      console.log(fullInfoAboutOrder);
+      setInfoAboutUserOrder([fullInfoAboutOrder, ...infoAboutUserOrder]);
     };
     setIsDataSubmitting(true);
     sendProducts(
@@ -69,6 +79,7 @@ export const Cart = (props: CartPropsType): JSX.Element => {
     );
     setIsDataSubmitting(false);
     setWasDataSendingSuccessful(true);
+    cartContext.clearCart();
   };
 
   const modalButtons = (
@@ -104,9 +115,9 @@ export const Cart = (props: CartPropsType): JSX.Element => {
 
   const dataWasSubmittedCartModalContent = (
     <>
-      <p>Ваш заказ успешно отправлен!</p>
+      <p>{infoAboutUserOrder[0] ? `${infoAboutUserOrder[0].user.name}, Ваш заказ № ${infoAboutUserOrder[0].id}аказ отправлен` : 'no data!'} </p>
       <div className={styles.actions}>
-        <button className={styles["button--alt"]} onClick={props.onHideCart}>
+        <button className={styles['button--alt']} onClick={props.onHideCart}>
           Закрыть
         </button>
       </div>
@@ -116,7 +127,9 @@ export const Cart = (props: CartPropsType): JSX.Element => {
   return (
     <Modal onHideCart={onHideCart}>
       {!isDataSubmitting && !wasDataSendingSuccessful && cartModalContent}
-      {isDataSubmitting && dataSubmittingCartModalContent}
+      {isDataSubmitting &&
+        !wasDataSendingSuccessful &&
+        dataSubmittingCartModalContent}
       {wasDataSendingSuccessful && dataWasSubmittedCartModalContent}
     </Modal>
   );
